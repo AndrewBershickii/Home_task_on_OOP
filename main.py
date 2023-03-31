@@ -36,6 +36,12 @@ class Student:
                \nЗавершенные курсы: {", ".join(self.finished_courses)}'
         return res
 
+    def __lt__(self, other):
+        if isinstance(other, Student) and isinstance(self._avg_grade(), float) and isinstance(other._avg_grade(), float):
+            return self._avg_grade() < other._avg_grade()
+        else:
+            return f'Ошибка сравнения'
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -88,14 +94,35 @@ class Reviewer(Mentor):
                \nФамилия: {self.surname}'
         return res
 
+def student_gr(lst, course):
+    all_g = []
+    for student in lst:
+        for grade in student.grades[course]:
+            all_g.append(grade)
+    if len(all_g) > 0:
+        return sum(all_g) / len(all_g)
+    else:
+        return f'Сперва добавьте оценки'
 
-best_student = Student('Андрей', 'Андреевич', 'М')
-best_student.courses_in_progress += ['Python', 'С++']
-best_student.finished_courses += ['Введение в программирование']
 
-best_student2 = Student('Карина', 'Владиславовна', 'Ж')
-best_student2.courses_in_progress += ['Python', 'С++']
-best_student2.finished_courses += ['Введение в программирование']
+def lector_gr(lst, course):
+    all_g = []
+    for lecturer in lst:
+        for grade in lecturer.grades[course]:
+            all_g.append(grade)
+    if len(all_g) > 0:
+        return sum(all_g) / len(all_g)
+    else:
+        return f'Сперва добавьте оценки'
+
+
+student1 = Student('Андрей', 'Андреевич', 'М')
+student1.courses_in_progress += ['Python', 'С++']
+student1.finished_courses += ['Введение в программирование']
+
+student2 = Student('Карина', 'Владиславовна', 'Ж')
+student2.courses_in_progress += ['Python', 'С++']
+student2.finished_courses += ['Введение в программирование']
 
 lecturer = Lecturer('Снежана', 'Денисовна')
 lecturer.courses_attached += ['Python', 'С++']
@@ -103,27 +130,30 @@ lecturer.courses_attached += ['Python', 'С++']
 lecturer2 = Lecturer('Виктория', 'Викторовна')
 lecturer2.courses_attached += ['Python']
 
-cool_reviewer = Reviewer('Геннадий', 'Иванович')
-cool_reviewer.courses_attached += ['Python', 'С++']
+reviewer = Reviewer('Геннадий', 'Иванович')
+reviewer.courses_attached += ['Python', 'С++']
 
-cool_reviewer.rate_hw(best_student, 'С++', 7)
-cool_reviewer.rate_hw(best_student, 'Python', 9)
-cool_reviewer.rate_hw(best_student, 'С++', 8)
-cool_reviewer.rate_hw(best_student, 'Python', 10)
+reviewer.rate_hw(student1, 'С++', 7)
+reviewer.rate_hw(student1, 'Python', 9)
+reviewer.rate_hw(student1, 'С++', 8)
+reviewer.rate_hw(student1, 'Python', 10)
 
-cool_reviewer.rate_hw(best_student2, 'С++', 6)
-cool_reviewer.rate_hw(best_student2, 'Python', 10)
-cool_reviewer.rate_hw(best_student2, 'С++', 7)
-cool_reviewer.rate_hw(best_student2, 'Python', 9)
+reviewer.rate_hw(student2, 'С++', 6)
+reviewer.rate_hw(student2, 'Python', 10)
+reviewer.rate_hw(student2, 'С++', 7)
+reviewer.rate_hw(student2, 'Python', 9)
 
-best_student.rate_lecturer(lecturer, 'Python', 10)
-best_student.rate_lecturer(lecturer, 'Python', 6)
-best_student.rate_lecturer(lecturer2, 'Python', 7)
-best_student.rate_lecturer(lecturer2, 'Python', 8)
+student1.rate_lecturer(lecturer, 'Python', 10)
+student1.rate_lecturer(lecturer, 'Python', 6)
+student1.rate_lecturer(lecturer2, 'Python', 7)
+student1.rate_lecturer(lecturer2, 'Python', 8)
 
-print(cool_reviewer)
+print(student1)
+print(student2)
 print(lecturer)
 print(lecturer2)
-print(best_student)
-print(best_student2)
-print(lecturer < lecturer2)
+print(reviewer)
+print(lecturer > lecturer2)
+print(student1 < student2)
+print(student_gr([student1, student2], 'С++'))
+print(lector_gr([lecturer, lecturer2], 'Python'))
